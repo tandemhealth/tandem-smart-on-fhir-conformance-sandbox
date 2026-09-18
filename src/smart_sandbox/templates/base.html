@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>{% block title %}Tandem SMART on FHIR Sandbox{% endblock %}</title>
+  <style>
+    :root {
+      --bg: #fafaf9; --fg: #1c1917; --muted: #78716c; --line: #e7e5e4;
+      --card: #ffffff; --accent: #0f766e; --accent-soft: #f0fdfa;
+      --fail: #b91c1c; --fail-soft: #fef2f2;
+      --warn: #b45309; --warn-soft: #fffbeb;
+      --pass: #15803d; --pass-soft: #f0fdf4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--fg);
+      font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    main { max-width: 880px; margin: 0 auto; padding: 24px 20px 80px; }
+    header.site {
+      border-bottom: 1px solid var(--line); background: var(--card);
+      padding: 14px 20px; display: flex; align-items: baseline; gap: 12px;
+    }
+    header.site a { color: var(--fg); text-decoration: none; font-weight: 650; }
+    header.site span { color: var(--muted); font-size: 13px; }
+    .banner {
+      background: var(--warn-soft); border: 1px solid #fde68a; color: var(--warn);
+      border-radius: 8px; padding: 10px 14px; margin: 20px 0; font-size: 13.5px;
+    }
+    h1 { font-size: 22px; margin: 26px 0 6px; }
+    h2 { font-size: 17px; margin: 30px 0 8px; }
+    p.lead, p.muted { color: var(--muted); }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+      padding: 18px 20px; margin: 14px 0;
+    }
+    label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 4px; }
+    input[type=text], input[type=password], input[type=url], select {
+      width: 100%; padding: 8px 10px; border: 1px solid var(--line);
+      border-radius: 7px; font: inherit; background: #fff;
+    }
+    .hint { font-size: 12.5px; color: var(--muted); margin: 3px 0 0; }
+    button {
+      margin-top: 18px; padding: 9px 18px; border: 0; border-radius: 7px;
+      background: var(--accent); color: #fff; font: inherit; font-weight: 600;
+      cursor: pointer;
+    }
+    button.secondary { background: #fff; color: var(--fg); border: 1px solid var(--line); }
+    button.danger { background: #fff; color: var(--fail); border: 1px solid #fecaca; }
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;
+    }
+    .copyable {
+      display: block; background: var(--accent-soft); border: 1px solid #ccfbf1;
+      border-radius: 7px; padding: 8px 12px; margin: 6px 0 2px;
+      word-break: break-all;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); font-size: 14px; }
+    th { color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em; }
+    .badge {
+      display: inline-block; padding: 2px 9px; border-radius: 99px;
+      font-size: 12px; font-weight: 650;
+    }
+    .badge.passed  { background: var(--pass-soft); color: var(--pass); }
+    .badge.warning { background: var(--warn-soft); color: var(--warn); }
+    .badge.failed  { background: var(--fail-soft); color: var(--fail); }
+    .badge.neutral { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+    .step { margin: 14px 0; }
+    .step-head { display: flex; align-items: baseline; gap: 10px; }
+    .step-head .ref { color: var(--muted); font-size: 12.5px; }
+    ul.checks { list-style: none; padding: 0; margin: 10px 0 0; }
+    ul.checks li {
+      padding: 6px 10px; border-left: 3px solid var(--line); margin: 6px 0;
+      font-size: 14px; background: var(--bg); border-radius: 0 6px 6px 0;
+    }
+    ul.checks li.fail { border-left-color: var(--fail); background: var(--fail-soft); }
+    ul.checks li.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+    ul.checks li.pass { border-left-color: var(--pass); }
+    ul.checks .detail { display: block; color: var(--muted); font-size: 12.5px; white-space: pre-wrap; }
+    details.transcript { margin-top: 10px; }
+    details.transcript summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+    details.transcript pre {
+      background: #292524; color: #fafaf9; border-radius: 8px; padding: 12px;
+      overflow-x: auto; font-size: 12.5px; white-space: pre-wrap; word-break: break-all;
+    }
+    .actions { display: flex; gap: 10px; }
+    .actions form { display: inline; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <a href="/">Tandem SMART on FHIR Sandbox</a>
+    <span>partner conformance harness</span>
+  </header>
+  <main>
+    <div class="banner">
+      This is a developer sandbox. Use <strong>synthetic test data only</strong> —
+      never launch it with real patient data, and never point it at a production EHR.
+    </div>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

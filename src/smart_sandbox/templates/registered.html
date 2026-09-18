@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Registered — Tandem SMART on FHIR Sandbox{% endblock %}
+{% block content %}
+<h1>{{ partner.name }} is registered</h1>
+
+<div class="card">
+  <h2 style="margin-top:0">Wire these into your EHR</h2>
+
+  <label>Launch URL (open with <code>?iss=…&amp;launch=…</code>)</label>
+  <code class="copyable">{{ launch_url }}</code>
+
+  <label>Redirect URI (register this for the client)</label>
+  <code class="copyable">{{ redirect_uri }}</code>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Your private dashboard</h2>
+  <p class="muted">
+    Bookmark this link — it is shown <strong>only once</strong> and is the only
+    way back into this registration. Anyone with the link can see your runs.
+  </p>
+  <code class="copyable">{{ dashboard_url }}?token={{ dashboard_token }}</code>
+  <p class="hint">
+    This registration expires automatically after
+    {{ (partner.expires_at - partner.created_at).days }} days.
+  </p>
+  <a href="{{ dashboard_url }}"><button type="button">Open dashboard</button></a>
+</div>
+{% endblock %}

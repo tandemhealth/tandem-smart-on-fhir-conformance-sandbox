@@ -1,0 +1,56 @@
+[project]
+name = "smart-sandbox"
+version = "0.1.0"
+description = "SMART on FHIR conformance sandbox for partners integrating an EHR with Tandem"
+readme = "README.md"
+requires-python = ">= 3.11"
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "pydantic-settings",
+  "sqlalchemy[asyncio]",
+  "aiosqlite",
+  "httpx",
+  "jinja2>=3.1",
+  "cryptography>=50.0.0",
+  "python-multipart>=0.0.18",
+]
+
+[project.scripts]
+smart-sandbox = "smart_sandbox.cli:main"
+
+[dependency-groups]
+test = ["pytest", "pytest-asyncio", "httpx"]
+analysis = [
+  "basedpyright>=1.39.9",
+  "ruff>=0.15.5",
+]
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.uv]
+default-groups = ["test", "analysis"]
+
+[tool.ruff]
+line-length = 88
+respect-gitignore = false
+exclude = ["**/__pycache__", "**/.*"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "SLF001"]
+ignore = ["E501"]
+fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["SLF001"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"

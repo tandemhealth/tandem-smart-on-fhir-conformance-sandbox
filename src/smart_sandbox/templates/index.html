@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Test your SMART on FHIR integration against Tandem</h1>
+<p class="lead">
+  This sandbox plays Tandem's role in the integration described in the
+  partner guide: it accepts your EHR launch, discovers your SMART
+  configuration, runs the PKCE authorization-code flow, reads
+  <code>Patient</code> and <code>Encounter</code>, and writes back a sample
+  <code>DocumentReference</code> and <code>Condition</code> resources —
+  validating every step and showing you a detailed conformance report.
+</p>
+
+<div class="card">
+  <h2 style="margin-top:0">Register your EHR</h2>
+  <p class="muted">
+    Register the client credentials your EHR issued for Tandem's sandbox
+    client. You'll get a launch URL to wire up to your "Launch Tandem" button.
+    The redirect URI to register on your side is
+    <code>{{ redirect_uri }}</code>.
+  </p>
+  <form method="post" action="/register">
+    <label for="name">Organization / EHR name</label>
+    <input type="text" id="name" name="name" required maxlength="200" placeholder="Example EHR AB">
+
+    <label for="client_id">client_id issued to Tandem</label>
+    <input type="text" id="client_id" name="client_id" required maxlength="500">
+
+    <label for="token_auth_method">Client authentication at the token endpoint</label>
+    <select id="token_auth_method" name="token_auth_method">
+      <option value="client_secret_basic">client_secret_basic (HTTP Basic)</option>
+      <option value="client_secret_post">client_secret_post (secret in body)</option>
+      <option value="none">none (public client, PKCE only)</option>
+    </select>
+
+    <label for="client_secret">client_secret</label>
+    <input type="password" id="client_secret" name="client_secret" maxlength="2000" autocomplete="off">
+    <p class="hint">
+      Sandbox/test credentials only — never production secrets. Stored
+      encrypted and used solely for the token exchange.
+    </p>
+
+    <label for="expected_iss">FHIR base URL (iss)</label>
+    <input type="url" id="expected_iss" name="expected_iss" required maxlength="2000" placeholder="https://fhir.example.org/r4">
+    <p class="hint">
+      The sandbox only sends this client's credentials to the token endpoint
+      discovered from this FHIR base; launches with a different iss are refused.
+    </p>
+
+    <button type="submit">Create sandbox registration</button>
+  </form>
+</div>
+
+<h2>How it works</h2>
+<ol class="muted">
+  <li>Register above — you get a launch URL and a private dashboard.</li>
+  <li>Point your EHR's launch button at the launch URL (with <code>iss</code> and <code>launch</code>).</li>
+  <li>The sandbox runs the full SMART flow against your servers and records a step-by-step report.</li>
+  <li>From the run report, trigger the note + diagnoses write-back and the refresh-token test.</li>
+</ol>
+{% endblock %}

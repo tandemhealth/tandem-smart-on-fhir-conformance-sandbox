@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Run report — Tandem SMART on FHIR Sandbox{% endblock %}
+{% block content %}
+<h1>
+  Conformance run
+  {% if run.status == RunStatus.AWAITING_AUTHORIZATION %}
+  <span class="badge neutral" data-overall-status="awaiting">awaiting authorization</span>
+  {% else %}
+  <span class="badge {{ run.overall_status.value }}" data-overall-status="{{ run.overall_status.value }}">{{
+    run.overall_status.value }}</span>
+  {% endif %}
+</h1>
+<p class="muted">
+  {{ partner.name }} · {{ run.launch_mode.value }} launch ·
+  <span class="mono">{{ run.iss }}</span> ·
+  started {{ run.created_at.strftime("%Y-%m-%d %H:%M:%S") }}Z
+  {% if run.patient_id %} · patient <code>{{ run.patient_id }}</code>{% endif %}
+  {% if run.encounter_id %} · encounter <code>{{ run.encounter_id }}</code>{% endif %}
+</p>
+
+{% if can_write_back %}
+<div class="card">
+  <h2 style="margin-top:0">Next steps</h2>
+  <p class="muted">
+    The write-back sends a synthetic progress note as a
+    <code>DocumentReference</code> plus sample <code>Condition</code> resources
+    (guide §5). Send it twice to exercise your idempotent-retry handling.
+    The refresh test exchanges the refresh token and re-reads the patient (§3.5).
+  </p>
+  <div class="actions">
+    <form method="post" action="/runs/{{ run.id }}/send-note">
+      <button type="submit">
+        {% if run.note_sent_count == 0 %}Send test note &amp; diagnoses{% else %}Send again (idempotency test){% endif
+        %}
+      </button>
+    </form>
+    <form method="post" action="/runs/{{ run.id }}/refresh">
+      <button type="submit" class="secondary">Test refresh token</button>
+    </form>
+  </div>
+</div>
+{% elif run.status == RunStatus.AUTHORIZED %}
+<div class="card">
+  <h2 style="margin-top:0">Next steps</h2>
+  <p class="muted">
+    The write-back and refresh tests are only offered to the registration
+    owner. Open this report from your dashboard, in the browser you registered
+    with, to run them.
+  </p>
+</div>
+{% endif %}
+
+{% for step in run.steps %}
+<div class="card step">
+  <div class="step-head">
+    <span class="badge {{ step.status.value }}" data-step-status="{{ step.status.value }}">{{ step.status.value
+      }}</span>
+    <strong>{{ loop.index }}. {{ step.title }}</strong>
+    <span class="ref">guide {{ step.doc_ref }}</span>
+  </div>
+  {% if step.checks %}
+  <ul class="checks">
+    {% for check in step.checks %}
+    <li
+      class="{% if not check.passed %}{{ 'fail' if check.severity.value == 'fail' else 'warn' }}{% elif check.severity.value == 'info' %}{% else %}pass{% endif %}"
+      data-check-result="{{ check.check_id }}:{{ 'pass' if check.passed else 'fail' }}">
+      {% if check.severity.value == "info" %}ⓘ{% elif check.passed %}✓{% else %}✕{% endif %}
+      {{ check.description }}
+      <span class="ref muted" style="color:var(--muted);font-size:12px">({{ check.doc_ref }})</span>
+      {% if check.detail %}<span class="detail">{{ check.detail }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% for exchange in step.http %}
+  <details class="transcript">
+    <summary class="mono">
+      {{ exchange.method }} {{ exchange.url }}
+      {% if exchange.status_code %}→ {{ exchange.status_code }}{% endif %}
+      {% if exchange.error %}→ error{% endif %}
+      {% if exchange.elapsed_ms is not none %}({{ exchange.elapsed_ms }} ms){% endif %}
+    </summary>
+    <pre>{{ exchange.method }} {{ exchange.url }}
+{% for key, value in exchange.request_headers.items() %}{{ key }}: {{ value }}
+{% endfor %}{% if exchange.request_body %}
+{{ exchange.request_body }}
+{% endif %}
+{% if exchange.error %}--- ERROR ---
+{{ exchange.error }}{% endif %}{% if exchange.status_code %}--- RESPONSE {{ exchange.status_code }} ---
+{% for key, value in exchange.response_headers.items() %}{{ key }}: {{ value }}
+{% endfor %}
+{{ exchange.response_body or "" }}{% endif %}</pre>
+  </details>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<p class="muted" style="margin-top:26px">
+  Credentials, authorization codes, and tokens are redacted from these
+  transcripts. Keep this report URL private — anyone with the link can view it.
+  Only the registration owner (dashboard cookie) can trigger the write-back and
+  refresh tests.
+</p>
+{% endblock %}

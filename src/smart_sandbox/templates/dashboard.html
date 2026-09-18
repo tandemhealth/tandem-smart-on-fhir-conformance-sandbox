@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ partner.name }} — Tandem SMART on FHIR Sandbox{% endblock %}
+{% block content %}
+<h1>{{ partner.name }}</h1>
+<p class="muted">
+  client_id <code>{{ partner.client_id }}</code> ·
+  token auth <code>{{ partner.token_auth_method.value }}</code>
+  {% if partner.expected_iss %} · iss <code>{{ partner.expected_iss }}</code>{% endif %}
+</p>
+
+<div class="card">
+  <label>EHR launch URL</label>
+  <code class="copyable">{{ launch_url }}?iss=&lt;FHIR_BASE_URL&gt;&amp;launch=&lt;LAUNCH_TOKEN&gt;</code>
+  <label>Redirect URI</label>
+  <code class="copyable">{{ redirect_uri }}</code>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Standalone launch</h2>
+  <p class="muted">
+    Starts the authorization flow without a launch token (guide §2.2); your
+    authorization server must prompt for the patient/encounter context.
+  </p>
+  <form method="post" action="/p/{{ partner.slug }}/standalone">
+    <p class="muted">Uses the registered FHIR base <code>{{ partner.expected_iss }}</code>.</p>
+    <button type="submit">Start standalone launch</button>
+  </form>
+</div>
+
+<h2>Runs</h2>
+{% if runs %}
+<table>
+  <tr><th>Started</th><th>Mode</th><th>iss</th><th>Result</th><th></th></tr>
+  {% for run in runs %}
+  <tr>
+    <td class="mono">{{ run.created_at.strftime("%Y-%m-%d %H:%M:%S") }}Z</td>
+    <td>{{ run.launch_mode.value }}</td>
+    <td class="mono">{{ run.iss }}</td>
+    <td>
+      {% if run.status == RunStatus.AWAITING_AUTHORIZATION %}
+        <span class="badge neutral">awaiting authorization</span>
+      {% else %}
+        <span class="badge {{ run.overall_status.value }}">{{ run.overall_status.value }}</span>
+      {% endif %}
+    </td>
+    <td><a href="/runs/{{ run.id }}">report</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p class="muted">No runs yet — launch the sandbox from your EHR to create one.</p>
+{% endif %}
+
+<h2>Danger zone</h2>
+<form method="post" action="/p/{{ partner.slug }}/delete"
+      onsubmit="return confirm('Delete this registration and all its runs?');">
+  <button type="submit" class="danger">Delete registration and all runs</button>
+</form>
+{% endblock %}

@@ -1,0 +1,77 @@
+Tandem Health Partner Sandbox Licence
+
+Copyright (c) 2026 Tandem Health AB. All rights reserved.
+
+This software (the "Sandbox") is made available by Tandem Health AB
+("Tandem") to help organisations that are integrating, or evaluating an
+integration of, their software with Tandem's products (each a "Partner").
+
+1. Permitted use
+
+   Subject to the terms below, Tandem grants you a non-exclusive,
+   non-transferable, revocable, royalty-free licence to:
+
+   a. clone or download the Sandbox;
+   b. run it on systems you control; and
+   c. modify it locally to the extent needed to run it in your environment,
+
+   in each case solely for the purpose of testing or evaluating an
+   integration between your software and Tandem's products.
+
+2. Restrictions
+
+   Except as expressly permitted in section 1, you may not:
+
+   a. distribute, publish, sublicense, sell, rent or otherwise make the
+      Sandbox or any modified version of it available to any third party;
+   b. use the Sandbox, or any part of it, in a product or service, or for
+      any purpose other than the one stated in section 1;
+   c. use the Sandbox with real patient data or against production systems;
+   d. remove or alter this licence or any copyright notice; or
+   e. use Tandem's name, logo or trademarks other than to describe the
+      Sandbox's origin.
+
+3. Contributions
+
+   If you send Tandem suggestions, bug reports or code changes for the
+   Sandbox, you grant Tandem a perpetual, irrevocable, worldwide,
+   royalty-free licence to use them for any purpose.
+
+4. Ownership
+
+   The Sandbox is licensed, not sold. Tandem and its licensors retain all
+   rights, title and interest in the Sandbox. This licence grants no rights
+   to Tandem's products, APIs or services themselves; those are governed by
+   your separate agreement with Tandem.
+
+5. No warranty
+
+   THE SANDBOX IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+   A passing result from the Sandbox does not constitute certification,
+   approval or a guarantee that an integration will work with Tandem's
+   production systems.
+
+6. Limitation of liability
+
+   TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT SHALL TANDEM BE
+   LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+   OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+   WITH THE SANDBOX OR ITS USE.
+
+7. Termination
+
+   This licence ends automatically if you breach any of its terms, and
+   Tandem may end it at any time by notice, including by removing the
+   Sandbox from public availability. On termination you must stop using the
+   Sandbox and delete your copies.
+
+8. Governing law
+
+   This licence is governed by the laws of Sweden. Disputes shall be
+   settled by the Swedish courts, with Stockholm District Court as the
+   court of first instance.
+
+Third-party components used by the Sandbox are licensed under their own
+terms, which are not affected by this licence.
